@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.active {
+    --tw-text-opacity: 1;
+    color: rgb(31 41 55 / var(--tw-text-opacity));
+    --tw-bg-opacity: 1;
+    background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
