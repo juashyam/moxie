@@ -158,7 +158,7 @@ export const App = {
   loadMagics() {
     this.magics.forEach((module, i) => {
       this.$alpine.magic(module.name, () => {
-        return (...params) => module(...params)
+        return (...params) => module.default(...params)
       });
     });
     return this;

@@ -1,3 +1,5 @@
+export const name = "range";
+
 const range = (start, end, step = 1) => {
   let output = [];
   if (typeof end === 'undefined') {

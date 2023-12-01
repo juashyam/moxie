@@ -6,8 +6,8 @@ import persist from '@alpinejs/persist'
 import App from "./src/build/js/App";
 import * as CalendarComponent from "./src/build/js/components/CalendarComponent";
 import * as ScheduleComponent from "./src/build/js/components/ScheduleComponent";
-import RangeComponent from "./src/build/js/components/utils/RangeComponent";
-import GlobalStorageComponent from "./src/build/js/components/utils/GlobalStorageComponent";
+import * as RangeComponent from "./src/build/js/components/utils/RangeComponent";
+import * as GlobalStorageComponent from "./src/build/js/components/utils/GlobalStorageComponent";
 
 window.App = App;
 
