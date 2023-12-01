@@ -5,6 +5,8 @@ export const App = {
   status: "waiting",
   $alpine: null,
   plugins: [],
+  magics: [],
+  globals: [],
   // mounts alpine as a module to this app container
   mount(alpine) {
     this.$alpine = alpine;
@@ -27,8 +29,15 @@ export const App = {
       }
 
       this.status = "started";
+
       // load Alpine-Plugins
       this.loadPlugins();
+
+      // load Alpine-Magic Functions
+      this.loadMagics();
+
+      // load global storage
+      this.loadGlobals();
 
       // start Alpine
       this.$alpine.start();
@@ -134,7 +143,37 @@ export const App = {
       } else {
         this.$alpine.data(name, component);
       }
+      this.registerGlobals(component);
     }
+  },
+  // Register magic functions
+  magic(magics) {
+    if (Array.isArray(magics)) {
+      magics.forEach((item, i) => {
+        this.magics.push(item);
+      });
+    }
+    return this;
+  },
+  loadMagics() {
+    this.magics.forEach((module, i) => {
+      this.$alpine.magic(module.name, () => {
+        return (...params) => module(...params)
+      });
+    });
+    return this;
+  },
+  registerGlobals(component) {
+    if (typeof component().initGlobals === "function") {
+      this.globals.push(component().initGlobals())
+    }
+  },
+  loadGlobals() {
+    let globalStorage = {}
+    this.globals.forEach((data, i) => {
+      globalStorage = {...globalStorage, ...data}
+    });
+    this.$alpine.store('globals', globalStorage);
   },
   // Ready-State callback
   ready(fn) {

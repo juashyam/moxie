@@ -1,25 +1,32 @@
+import $globals from "./utils/GlobalStorageComponent";
+
 export const name = "calendar";
 
 const CalendarComponent = () => ({
-  monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-  dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-  currentDate: 1,
-  currentMonth: 1,
-  currentYear: 1990,
+  // Set reusable states/values in global Alpine store
+  initGlobals() {
+    return {
+      monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      dayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      currentDate: 0,
+      currentMonth: 0,
+      currentYear: 1990,
+    }
+  },
   init() {
     var today = this.today()
-    this.currentDate = today.getDate()
-    this.currentMonth = today.getMonth()
-    this.currentYear = today.getFullYear()
+    $globals().currentDate = today.getDate()
+    $globals().currentMonth = today.getMonth()
+    $globals().currentYear = today.getFullYear()
   },
   today() {
     return new Date()
   },
   currentMonthFullName() {
-    return this.monthNames[this.currentMonth]
+    return $globals().monthNames[$globals().currentMonth]
   },
-  renderCalendar(year = this.currentYear, month = this.currentMonth) {
-    var lastDay = new Date(this.currentYear, this.currentMonth + 1, 0)
+  renderCalendar(year = $globals().currentYear, month = $globals().currentMonth) {
+    var lastDay = new Date($globals().currentYear, $globals().currentMonth + 1, 0)
     var calendarHTML = ""
     var dateBeingProcessed = 1
 
@@ -53,44 +60,33 @@ const CalendarComponent = () => ({
       first.getMonth() === second.getMonth() &&
       first.getDate() === second.getDate()
   },
-  gotoMonth(month = this.currentMonth) {
+  gotoMonth(month = $globals().currentMonth) {
     if (typeof(month) !== "undefined" && month !== null) {
-      this.currentMonth = parseInt(month) - 1
-      this.renderCalendar(this.currentYear, this.currentMonth)
+      $globals().currentMonth = parseInt(month) - 1
+      this.renderCalendar($globals().currentYear, $globals().currentMonth)
     }
   },
   gotoYear(year = this.currentYear) {
     if (typeof(year) !== "undefined" && year !== null) {
-      this.currentYear = parseInt(year)
-      this.renderCalendar(this.currentYear, this.currentMonth)
+      $globals().currentYear = parseInt(year)
+      this.renderCalendar($globals().currentYear, $globals().currentMonth)
     }
   },
   gotoPrevMonth() {
-    this.currentYear = this.currentMonth <= 0 ? (this.currentYear - 1) : this.currentYear
-    this.currentMonth = this.currentMonth <= 0 ? 11 : (this.currentMonth - 1)
-    this.renderCalendar(this.currentYear, this.currentMonth)
+    $globals().currentYear = $globals().currentMonth <= 0 ? ($globals().currentYear - 1) : $globals().currentYear
+    $globals().currentMonth = $globals().currentMonth <= 0 ? 11 : ($globals().currentMonth - 1)
+    this.renderCalendar($globals().currentYear, $globals().currentMonth)
   },
   gotoNextMonth() {
-    this.currentYear = this.currentMonth >= 11 ? (this.currentYear + 1) : this.currentYear
-    this.currentMonth = this.currentMonth >= 11 ? 0 : (this.currentMonth + 1)
-    this.renderCalendar(this.currentYear, this.currentMonth)
+    $globals().currentYear = $globals().currentMonth >= 11 ? ($globals().currentYear + 1) : $globals().currentYear
+    $globals().currentMonth = $globals().currentMonth >= 11 ? 0 : ($globals().currentMonth + 1)
+    this.renderCalendar($globals().currentYear, $globals().currentMonth)
   },
   gotoTodayMonth() {
     var today = this.today()
-    this.currentMonth = today.getMonth()
-    this.currentYear = today.getFullYear()
-    this.renderCalendar(this.currentYear, this.currentMonth)
-  },
-  range(start, end, step = 1) {
-    let output = [];
-    if (typeof end === 'undefined') {
-      end = start;
-      start = 0;
-    }
-    for (let i = start; i < end; i += step) {
-      output.push(i);
-    }
-    return output;
+    $globals().currentMonth = today.getMonth()
+    $globals().currentYear = today.getFullYear()
+    this.renderCalendar($globals().currentYear, $globals().currentMonth)
   }
 });
 

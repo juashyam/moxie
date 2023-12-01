@@ -19,10 +19,10 @@
         </p>
       </div>
     </header>
-    <div class="container mx-auto flex flex-wrap pb-6" x-data="calendar">
-      <section class="w-full flex flex-col items-center px-3">
+    <div class="container mx-auto flex flex-wrap pb-6">
+      <section class="w-full flex flex-col items-center px-3 md:w-2/4" x-data="calendar">
         <div class="flex flex-col">
-          <nav class="w-full py-4 bg-gray-800 shadow">
+          <nav class="w-full py-3 bg-gray-800 shadow">
             <div class="w-full container mx-auto flex flex-wrap items-center justify-between">
               <ul class="flex items-center justify-between font-bold text-sm text-white uppercase no-underline">
                 <li class="px-3 cursor-pointer" x-on:click="gotoPrevMonth()">
@@ -40,7 +40,7 @@
                 </li>
               </ul>
               <div class="flex items-center no-underline text-white pr-6 text-2xl cursor-default font-bold">
-                <div class="relative text-sm" x-data="{show: false}" @click.away="show = false">
+                <div class="month-dropdown relative text-sm" x-data="{show: false}" @click.away="show = false">
                   <button type="button" x-on:click="show = !show" class="flex items-center gap-2 bg-gray-800 border border-gray-300 hover:bg-gray-200 hover:text-gray-800 px-3 py-1.5 rounded-lg">
                     <span x-text="currentMonthFullName()"></span>
                     <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -49,20 +49,20 @@
                   </button>
                   <div x-show="show" x-on:click="show = false" x-transition.origin.top.left class="absolute left-0 mt-2 w-40 rounded-md bg-gray-800 shadow-md overflow-y-auto h-80">
                     <template x-for="month in 12" :key="month">
-                      <span class="flex items-center w-full px-4 py-2.5 text-sm hover:bg-gray-200 hover:text-gray-800 cursor-pointer" :class="{'active': currentMonth == (month - 1)}" x-data="{monthId: month}" x-bind:data-month="monthId" @click="gotoMonth(parseInt($event.target.getAttribute('data-month')))" x-text="monthNames[month - 1]"></span>
+                      <span class="flex items-center w-full px-4 py-2.5 text-sm hover:bg-gray-200 hover:text-gray-800 cursor-pointer" :class="{'active': $globals().currentMonth == (month - 1)}" x-data="{monthId: month}" x-bind:data-month="monthId" @click="gotoMonth(parseInt($event.target.getAttribute('data-month')))" x-text="$globals().monthNames[month - 1]"></span>
                     </template>
                   </div>
                 </div>
-                <div class="relative text-sm pl-3" x-data="{show: false}" @click.away="show = false">
+                <div class="year-dropdown relative text-sm pl-3" x-data="{show: false}" @click.away="show = false">
                   <button type="button" x-on:click="show = !show" class="flex items-center gap-2 bg-gray-800 border border-gray-300 hover:bg-gray-200 hover:text-gray-800 px-3 py-1.5 rounded-lg">
-                    <span x-text="currentYear"></span>
+                    <span x-text="$globals().currentYear"></span>
                     <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
                     </svg>
                   </button>
-                  <div x-show="show" x-on:click="show = false" x-data="{years: range(1990, 2036)}" x-transition.origin.top.left class="absolute left-0 mt-2 w-40 rounded-md bg-gray-800 shadow-md overflow-y-auto h-80">
+                  <div x-show="show" x-on:click="show = false" x-data="{years: $range($globals().currentYear - 5, $globals().currentYear + 10)}" x-transition.origin.top.left class="absolute left-0 mt-2 w-40 rounded-md bg-gray-800 shadow-md overflow-y-auto h-80">
                     <template x-for="y in years" :key="y">
-                      <span class="flex items-center w-full px-4 py-2.5 text-sm hover:bg-gray-200 hover:text-gray-800 cursor-pointer" :class="{'active': currentYear == y}" x-data="{year: y}" x-bind:data-year="year" @click="gotoYear(parseInt($event.target.getAttribute('data-year')))" x-text="y"></span>
+                      <span class="flex items-center w-full px-4 py-2.5 text-sm hover:bg-gray-200 hover:text-gray-800 cursor-pointer" :class="{'active': $globals().currentYear == y}" x-data="{year: y}" x-bind:data-year="year" @click="gotoYear(parseInt($event.target.getAttribute('data-year')))" x-text="y"></span>
                     </template>
                   </div>
                 </div>
@@ -73,19 +73,19 @@
             <table class="table-auto text-md text-left rtl:text-right">
               <thead>
                 <tr>
-                  <th scope="col" class="px-6 py-3 text-center">Sun</th>
-                  <th scope="col" class="px-6 py-3 text-center">Mon</th>
-                  <th scope="col" class="px-6 py-3 text-center">Tue</th>
-                  <th scope="col" class="px-6 py-3 text-center">Wed</th>
-                  <th scope="col" class="px-6 py-3 text-center">Thu</th>
-                  <th scope="col" class="px-6 py-3 text-center">Fri</th>
-                  <th scope="col" class="px-6 py-3 text-center">Sat</th>
+                 <template x-for="day in $globals().dayNames">
+                    <th scope="col" class="px-6 py-3 text-center" x-text="day"></th>
+                  </template>
                 </tr>
               </thead>
               <tbody x-html="renderCalendar()"></tbody>
             </table>
           </div>
         </div>
+      </section>
+      <section class="w-full flex flex-col items-center px-3 md:w-2/4" x-data="schedule">
+        <p class="text-gray-800 text-2xl border-solid border-b-2 border-gray-800 p-3"><span x-text="title"></span></p>
+        <p x-text="$globals().schedules"></p>
       </section>
     </div>
     <script type="module" src="/main.js"></script>
