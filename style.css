@@ -2,9 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-.active {
-    --tw-text-opacity: 1;
-    color: rgb(31 41 55 / var(--tw-text-opacity));
+.has-schedules {
     --tw-bg-opacity: 1;
-    background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+    background: linear-gradient(-135deg,rgb(31 41 55 / var(--tw-bg-opacity)) 10px,#FFF 0);
+    cursor: pointer;
+}
+
+.active {
+    font-weight: 700;
+    border-width: 2px;
+    border-color: rgb(31 41 55);
 }

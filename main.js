@@ -1,8 +1,6 @@
 import './style.css'
 
 import Alpine from "alpinejs";
-import persist from '@alpinejs/persist'
-
 import App from "./src/build/js/App";
 import * as CalendarComponent from "./src/build/js/components/CalendarComponent";
 import * as ScheduleComponent from "./src/build/js/components/ScheduleComponent";
@@ -17,7 +15,7 @@ App.mount(Alpine)
     RangeComponent,
     GlobalStorageComponent
   ])
-  .usePlugins([persist])
+  .usePlugins([])
   .register([
     CalendarComponent,
     ScheduleComponent
